@@ -6,7 +6,8 @@ int main() {
     ezcfg::Parser cfgfile("tests/test1.ezcfg");
     std::map<std::string, std::string> config_data = {
         {"IP_addr", ""},
-        {"Port", ""}
+        {"Port", ""},
+        {"size", ""}
     };
     cfgfile.initMap(&config_data);
     cfgfile.parse();

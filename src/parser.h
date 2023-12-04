@@ -22,6 +22,7 @@ namespace ezcfg
 
         void p_parseLine(const std::string &line_, int lineIndex);
         void p_rmvWhitspacesAndLFs(std::string &str);
+        std::string replaceKeys(const std::string& input, int lineIndex);
     };
 
     namespace functions

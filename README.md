@@ -50,7 +50,7 @@ cwd_path: <WDP>         # absolute path to current working directory
 It's also possible to overwrite default macros or define new macros:
 
 ```
-~<MACRO_NAME>: new_val  # overwrite / set value of MACRO_NAME
+$<MACRO_NAME>: new_val  # overwrite / set value of MACRO_NAME
 ```
 
 ### Comments
@@ -73,6 +73,7 @@ Important details:
 - The Parser is case sensitive
 - If a value is assigned multiple times, the latest definition is used
 - Parsed information is stored in a std::map<std::string, std::string>
+- Values get parsed first
 
 ## Examples
 
@@ -106,7 +107,7 @@ int main() {
 
 #### config.ezcfg
 ```
-~<SERVROOT>: servroot/          # define a macro
+$<SERVROOT>: servroot/          # define a macro
 
 IP_addr: 127.0.0.1              # set variables
 Port: 443

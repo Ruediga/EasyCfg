@@ -1,6 +1,9 @@
-~$SERVROOT: servroot/   # comment
+$<SERVROOT>: servroot/   # comment
+$<>: 7777
 
 # comment
 
 IP_addr: 127.0.0.1  # comment
 Port: 443
+
+size: <><>
