@@ -44,7 +44,7 @@ List of predefined macros (evaluated during runtime)
 
 ```
 ezcfg_string: <EZCFG>   # evaluates to "EasyCfg"
-cwd_path: <WDP>         # absolute path to current working directory
+cwd_path: <EP>         # absolute path to current working directory
 ```
 
 It's also possible to overwrite default macros or define new macros:
@@ -92,7 +92,10 @@ int main() {
     cfgfile.initMap(config_data);
 
     // parse the file
-    cfgfile.parse();
+    if (!cfgfile.parse()) {
+        std::cout << "Error parsing file!" << std::endl;
+        return -1;
+    }
 
     if (!config_data["IP_addr"].size())
         std::cout << "IP_addr has not been set!" << std::endl;
@@ -112,7 +115,7 @@ $<SERVROOT>: servroot/          # define a macro
 IP_addr: 127.0.0.1              # set variables
 Port: 443
 
-serverroot: <WDP>/<SVROOT>      # accessing macros
+serverroot: <EP>/<SVROOT>      # accessing macros
 ```
 
 

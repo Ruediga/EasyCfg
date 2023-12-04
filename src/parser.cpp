@@ -19,9 +19,11 @@ ezcfg::Parser::~Parser()
 void ezcfg::Parser::initMap(std::map<std::string, std::string> *config_map)
 {
     p_variable_map = config_map;
+
+    initMacroMap();
 }
 
-void ezcfg::Parser::parse()
+bool ezcfg::Parser::parse()
 {
     std::ifstream file(p_file_src_path);
 
@@ -30,23 +32,28 @@ void ezcfg::Parser::parse()
 
     std::string line;
     int lineIndex = 1;
+    bool success = true;
     while (std::getline(file, line))
     {
-        p_parseLine(line, lineIndex);
+        if (!p_parseLine(line, lineIndex))
+            success = false;
+
         lineIndex++;
     }
 
     file.close();
+
+    return success;
 }
 
-void ezcfg::Parser::p_parseLine(const std::string &line_, int lineIndex)
+bool ezcfg::Parser::p_parseLine(const std::string &line_, int lineIndex)
 {
     std::string line = line_;
     p_rmvWhitspacesAndLFs(line);
 
     // throw away empty lines and commented out lines
     if (line.empty()) {
-        return;
+        return false;
     }
 
     // remove comment
@@ -54,14 +61,13 @@ void ezcfg::Parser::p_parseLine(const std::string &line_, int lineIndex)
     line = line.substr(0, p);
 
     if (line.empty()) {
-        return;
+        return false;
     }
 
     if (functions::countOccurrencesOfCharInString(line, ':') != 1) {
-        // [TODO]
         std::cout << "SYNTAX::ERROR: Multiple / No occurences of \':\' found in line "
             << lineIndex << std::endl;
-        return;
+        return false;
     }
 
     size_t colonPos = line.find(':');
@@ -83,43 +89,43 @@ void ezcfg::Parser::p_parseLine(const std::string &line_, int lineIndex)
                 size_t starting_pos = key.find_first_of('<');
                 size_t end_pos = key.find_first_of('>');
                 // valid
-                // [TODO] maybe last if wrong
                 if (starting_pos == 1 && end_pos == key.size() - 1) {
                     // -2
                     std::string new_macro_name = key.substr(starting_pos + 1, end_pos - 2);
                     setMacroMapAt(new_macro_name, value);
-                    return;
+                    return true;
                 }
                 else {
-                    std::cout << "SYNTAX::ERROR: macro definition syntax is $<MACRO_NAME>:MACRO_VALUE "
+                    std::cout << "SYNTAX::ERROR: macro definition syntax is $<MACRO_NAME>:MACRO_VALUE in line "
                         << lineIndex << std::endl;
-                    return;
+                    return false;
                 }
             }
             else {
-                std::cout << "SYNTAX::ERROR: macro definition syntax is $<MACRO_NAME>:MACRO_VALUE "
+                std::cout << "SYNTAX::ERROR: macro definition syntax is $<MACRO_NAME>:MACRO_VALUE in line "
             << lineIndex << std::endl;
-            return;
+            return false;
             }
         }
         else {
             std::cout << "SYNTAX::ERROR: macro definition error in line "
             << lineIndex << std::endl;
-            return;
+            return false;
         }
     }
     // implement macro inserting
 
-    // value
     // setting a variable
     auto it = p_variable_map->find(key);
     if (it == p_variable_map->end()) {
-        // [TODO]
         std::cout << "PARSING::ERROR: " << key << " doesn't exist!" << std::endl;
+        return false;
     }
     else {
         p_variable_map->at(key) = value;
-    } 
+    }
+
+    return true;
 }
 
 void ezcfg::Parser::p_rmvWhitspacesAndLFs(std::string &str_)

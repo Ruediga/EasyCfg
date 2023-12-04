@@ -1,9 +1,11 @@
 $<SERVROOT>: servroot/   # comment
 $<>: 7777
 
+size: <EP>
+
+$<EP>: eees
+
 # comment
 
 IP_addr: 127.0.0.1  # comment
 Port: 443
-
-size: <><>

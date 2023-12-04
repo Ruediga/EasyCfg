@@ -13,14 +13,16 @@ namespace ezcfg
 
         void initMap(std::map<std::string, std::string> *config_map);
 
-        void parse();
+        // return false on parsing failure
+        bool parse();
 
     private:
+        std::string error_log;
         const char *p_file_src_path;
         std::map<std::string, std::string> *p_variable_map;
         std::map<std::string, std::string> macroMap;
 
-        void p_parseLine(const std::string &line_, int lineIndex);
+        bool p_parseLine(const std::string &line_, int lineIndex);
         void p_rmvWhitspacesAndLFs(std::string &str);
         std::string replaceKeys(const std::string& input, int lineIndex);
     };

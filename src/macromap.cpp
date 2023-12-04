@@ -15,6 +15,7 @@ void ezcfg::initMacroMap()
 void ezcfg::setMacroMapAt(std::string &key, std::string &value)
 {
     auto iterator = macroMap.function_map.find(key);
+    // if found in function_map
     if (iterator != macroMap.function_map.end()) {
         macroMap.function_map[key] = nullptr;
     }
@@ -27,10 +28,14 @@ void ezcfg::setMacroMapAt(std::string &key, std::string &value)
 bool ezcfg::getMacroMapAt(std::string &key, std::string &out)
 {
     auto iterator = macroMap.function_map.find(key);
+    // if function found
     if (iterator != macroMap.function_map.end()) {
-        macroMap.function_map[key](out);
-        return true;
+        if (macroMap.function_map[key] != nullptr) {
+            macroMap.function_map[key](out);
+            return true;
+        }
     }
+    // else
     auto iterator2 = macroMap.string_map.find(key);
     if (iterator2 != macroMap.string_map.end()) {
         out = macroMap.string_map[key];

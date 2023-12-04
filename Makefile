@@ -1,5 +1,5 @@
 CXX := g++
-CXXFLAGS := -std=c++20 -Wall
+CXXFLAGS := -std=c++20 -Wall -fsanitize=address
 SRC_DIR := src
 BIN_DIR := build
 TEST_DIR := tests
